@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Para cadastro/login preciso ter pelo menos esses atributos
+
 @Data // Ajuda a reduzir código repetitivo. Equivale a usar @Getter, @Setter, @ToString, @EqualsAndHashCode e @RequiredArgsConstructor juntos.
 @Entity
 @NoArgsConstructor
@@ -19,8 +21,8 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, unique = true) // Garante que o email seja único e não nulo
-    private String email;
+    @Column(nullable = false, unique = true) // Garante que o nome seja único e não nulo
+    private String nome;
 
     @Column(nullable = false)
     private String senha;
