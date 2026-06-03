@@ -5,10 +5,13 @@ import java.util.Collections; // Collections no plural!!
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*; // Já pega os que estão abaixo
+// import org.springframework.security.core.userdetails.User;
+// import org.springframework.security.core.userdetails.UserDetailsService;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.SecurityFilterChain;
 
 import com.sistemalogin.security.model.Usuario;
 import com.sistemalogin.security.model.UsuarioRepository;
@@ -23,7 +26,6 @@ public class ConfiguracaoSeguranca {
     // 1 - AUTENTICAÇÃO - Cadastro Novo, Login realizado(?)
     // Bean 1: como o Security carrega o usuário do banco. Marca o método como um bean gerenciado pelo Spring. O Spring chama o método uma vez e armazena o resultado. O objeto pode ser injetado em qualquer lugar com @Autowired. Substitui a instanciação manual com new.
     @Bean
-    
     public UserDetailsService userDetailsService (UsuarioRepository usuarioRepository) {
         // Esta lambda implementa loadUserByUsername(String username). O Spring Security a chama automaticamente no momento do login. Verifica se o username existe.
         return username -> {
@@ -43,5 +45,15 @@ public class ConfiguracaoSeguranca {
         }; 
     }
 
-    // 2 - AUTORIZAÇÃO
+    // 2 - AUTORIZAÇÃO - O que o usuário pode acessar (ROLE_USER, ROLE_ADMIN)
+    @Bean
+    public SecurityFilterChain chain(HttpSecurity http) throws Exception { 
+
+        return http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/", "/cadastro", "/css/**").permitAll()
+        )
+
+    }
+
 }
